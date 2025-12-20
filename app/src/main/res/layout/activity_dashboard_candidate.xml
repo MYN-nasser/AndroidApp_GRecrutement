@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_grey"
+    tools:context=".candidate.DashboardCandidateActivity">
+
+    <!-- App Bar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary_color"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Tableau de bord"
+        app:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/ic_menu" />
+
+    <!-- Welcome Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardWelcome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvWelcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bonjour, [Nom]"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/tvSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Trouvez votre emploi idéal"
+                android:textSize="14sp"
+                android:textColor="@color/secondary_text" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Quick Stats Row -->
+    <LinearLayout
+        android:id="@+id/layoutStats"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:weightSum="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardWelcome">
+
+        <!-- Applications Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Candidatures"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:textColor="@color/secondary_text" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Interviews Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/green" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Entretiens"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:textColor="@color/secondary_text" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Saved Jobs Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/orange" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Offres sauvegardées"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:textColor="@color/secondary_text" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+    <!-- Quick Actions Title -->
+    <TextView
+        android:id="@+id/tvQuickActions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Actions rapides"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutStats" />
+
+    <!-- Quick Actions Grid -->
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/gridQuickActions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:columnCount="2"
+        app:rowCount="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvQuickActions">
+
+        <!-- Search Jobs Button -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            app:layout_margin="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:layout_gravity="fill">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_search_job"
+                    android:tint="@color/primary_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Chercher un emploi"
+                    android:textSize="14sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/primary_text" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Upload CV Button -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            app:layout_margin="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:layout_gravity="fill">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_upload_cv"
+                    android:tint="@color/primary_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Mettre à jour CV"
+                    android:textSize="14sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/primary_text" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- My Applications Button -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            app:layout_margin="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:layout_gravity="fill">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_my_applications"
+                    android:tint="@color/primary_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Mes candidatures"
+                    android:textSize="14sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/primary_text" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Career Tips Button -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            app:layout_margin="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:layout_gravity="fill">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_career_tips"
+                    android:tint="@color/primary_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Conseils carrière"
+                    android:textSize="14sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/primary_text" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.gridlayout.widget.GridLayout>
+
+    <!-- Recent Jobs Title -->
+    <TextView
+        android:id="@+id/tvRecentJobs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Offres récentes"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gridQuickActions" />
+
+    <!-- View All Button -->
+    <TextView
+        android:id="@+id/tvViewAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Voir tout"
+        android:textColor="@color/primary_color"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvRecentJobs" />
+
+    <!-- Recent Jobs RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecentJobs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvRecentJobs"
+        tools:listitem="@layout/item_job_horizontal" />
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_candidate" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

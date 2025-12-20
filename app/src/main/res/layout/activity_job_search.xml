@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_grey"
+    tools:context=".candidate.JobSearchActivity">
+
+    <!-- App Bar with Search -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary_color"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Recherche d'emploi"
+        app:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/ic_arrow_back" />
+
+    <!-- Search Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardSearch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Search Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutSearch"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Poste, entreprise ou mot-clé"
+                app:startIconDrawable="@drawable/ic_search">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionSearch"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Quick Filters Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Filtres rapides:"
+                    android:textSize="14sp"
+                    android:textColor="@color/secondary_text" />
+
+                <Button
+                    android:id="@+id/btnFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:backgroundTint="@color/primary_color"
+                    android:drawableStart="@drawable/ic_filter"
+                    android:drawablePadding="4dp"
+                    android:text="Filtrer"
+                    android:textAllCaps="false"
+                    android:textSize="12sp"
+                    style="@style/Widget.MaterialComponents.Button.TextButton" />
+
+                <Button
+                    android:id="@+id/btnLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@color/secondary_text"
+                    android:drawableStart="@drawable/ic_location"
+                    android:drawablePadding="4dp"
+                    android:text="Casablanca"
+                    android:textAllCaps="false"
+                    android:textSize="12sp"
+                    style="@style/Widget.MaterialComponents.Button.TextButton" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Filter Chips (when expanded) -->
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupFilters"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardSearch">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipRemote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Télétravail"
+            style="@style/Widget.MaterialComponents.Chip.Filter" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipCDI"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CDI"
+            style="@style/Widget.MaterialComponents.Chip.Filter" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipStage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stage"
+            style="@style/Widget.MaterialComponents.Chip.Filter" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipRecent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Récent (< 7 jours)"
+            style="@style/Widget.MaterialComponents.Chip.Filter" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <!-- Results Count -->
+    <TextView
+        android:id="@+id/tvResultsCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="128 offres trouvées"
+        android:textSize="14sp"
+        android:textColor="@color/secondary_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chipGroupFilters" />
+
+    <!-- Sort Button -->
+    <Button
+        android:id="@+id/btnSort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@android:color/transparent"
+        android:drawableEnd="@drawable/ic_sort"
+        android:drawablePadding="4dp"
+        android:text="Pertinence"
+        android:textAllCaps="false"
+        android:textColor="@color/primary_color"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvResultsCount" />
+
+    <!-- Jobs List -->
+
+    <!-- Loading Indicator -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvJobs"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:clipToPadding="false"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvResultsCount"
+        app:layout_constraintVertical_bias="0.0"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_job_vertical" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Empty State -->
+    <LinearLayout
+        android:id="@+id/layoutEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/rvJobs">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_empty_search"
+            android:tint="@color/secondary_text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Aucune offre trouvée"
+            android:textColor="@color/primary_text"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="Essayez d'autres mots-clés ou modifiez vos filtres"
+            android:textColor="@color/secondary_text"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnResetFilters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/primary_color"
+            android:text="Réinitialiser les filtres"
+            android:textAllCaps="false"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

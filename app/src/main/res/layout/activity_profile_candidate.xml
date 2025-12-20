@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_grey"
+    tools:context=".candidate.ProfileCandidateActivity">
+
+    <!-- App Bar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary_color"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Mon Profil"
+        app:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/ic_arrow_back" />
+
+    <!-- Scrollable Content -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="24dp">
+
+            <!-- Profile Header Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardProfileHeader"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- Profile Picture -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/ivProfile"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:src="@drawable/ic_profile_placeholder"
+                            app:civ_border_width="2dp"
+                            app:civ_border_color="@color/primary_color" />
+
+                        <TextView
+                            android:id="@+id/tvChangePhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Changer la photo"
+                            android:textColor="@color/primary_color"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <!-- Name -->
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:text="Ayman TEMSAMANI"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_text" />
+
+                    <!-- Title -->
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:text="Développeur Android"
+                        android:textSize="16sp"
+                        android:textColor="@color/secondary_text" />
+
+                    <!-- Email -->
+                    <TextView
+                        android:id="@+id/tvEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="ahmed.benani@emsi.ma"
+                        android:textSize="14sp"
+                        android:textColor="@color/secondary_text" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- CV Upload Section -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardCV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardProfileHeader">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- Section Title -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📄 Mon CV / Lettre de Motivation"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_text" />
+
+                    <!-- Current CV Status -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_pdf"
+                            android:tint="@color/primary_color" />
+
+                        <TextView
+                            android:id="@+id/tvCurrentCV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:text="CV_Ahmed_BENANI.pdf"
+                            android:textSize="14sp"
+                            android:textColor="@color/primary_text" />
+
+                        <TextView
+                            android:id="@+id/tvCVStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_status_active"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"
+                            android:text="Actif"
+                            android:textColor="@android:color/white"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <!-- Upload Date -->
+                    <TextView
+                        android:id="@+id/tvUploadDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Mis à jour: 15 Mars 2024"
+                        android:textSize="12sp"
+                        android:textColor="@color/secondary_text" />
+
+                    <!-- Upload Buttons -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/btnUploadCV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/primary_color"
+                            android:text="Mettre à jour CV"
+                            android:textAllCaps="false"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+                        <Button
+                            android:id="@+id/btnUploadLetter"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/green"
+                            android:text="Ajouter Lettre"
+                            android:textAllCaps="false"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+                    </LinearLayout>
+
+                    <!-- CV Tips -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="💡 Conseil: Votre CV doit être en PDF, maximum 2 pages"
+                        android:textSize="12sp"
+                        android:textColor="@color/secondary_text" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Personal Information Section -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardPersonalInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardCV">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- Section Title -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="👤 Informations Personnelles"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_text" />
+
+                    <!-- Edit Button -->
+                    <TextView
+                        android:id="@+id/tvEditPersonal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="-24dp"
+                        android:text="Modifier"
+                        android:textColor="@color/primary_color"
+                        android:textSize="14sp" />
+
+                    <!-- Info Grid -->
+                    <androidx.gridlayout.widget.GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        app:columnCount="2"
+                        app:rowCount="4">
+
+                        <!-- Phone -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="📞 Téléphone:"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="14sp"
+                            app:layout_column="0"
+                            app:layout_row="0" />
+
+                        <TextView
+                            android:id="@+id/tvPhone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginStart="16dp"
+                            android:text="+212 6 12 34 56 78"
+                            android:textSize="14sp"
+                            app:layout_column="1"
+                            app:layout_row="0" />
+
+                        <!-- Location -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="📍 Ville:"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="14sp"
+                            app:layout_column="0"
+                            app:layout_row="1" />
+
+                        <TextView
+                            android:id="@+id/tvLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginStart="16dp"
+                            android:text="Casablanca"
+                            android:textSize="14sp"
+                            app:layout_column="1"
+                            app:layout_row="1" />
+
+                        <!-- Speciality -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="🎓 Spécialité:"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="14sp"
+                            app:layout_column="0"
+                            app:layout_row="2" />
+
+                        <TextView
+                            android:id="@+id/tvSpeciality"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginStart="16dp"
+                            android:text="Génie Logiciel"
+                            android:textSize="14sp"
+                            app:layout_column="1"
+                            app:layout_row="2" />
+
+                        <!-- Graduation Year -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="📅 Promotion:"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="14sp"
+                            app:layout_column="0"
+                            app:layout_row="3" />
+
+                        <TextView
+                            android:id="@+id/tvGraduation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginStart="16dp"
+                            android:text="2024"
+                            android:textSize="14sp"
+                            app:layout_column="1"
+                            app:layout_row="3" />
+
+                    </androidx.gridlayout.widget.GridLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Career Preferences -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardPreferences"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardPersonalInfo">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- Section Title -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🎯 Préférences Professionnelles"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_text" />
+
+                    <!-- Job Type Chips -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Type d'emploi:"
+                        android:textSize="14sp"
+                        android:textColor="@color/secondary_text" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupJobType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp">
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CDI"
+                            style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CDD"
+                            style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Stage"
+                            style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Freelance"
+                            style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <!-- Salary Expectation -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="💵 Salaire attendu:"
+                        android:textSize="14sp"
+                        android:textColor="@color/secondary_text" />
+
+                    <TextView
+                        android:id="@+id/tvSalary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="15 000 - 20 000 MAD"
+                        android:textSize="16sp"
+                        android:textColor="@color/primary_text" />
+
+                    <!-- Availability -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="📅 Disponibilité:"
+                        android:textSize="14sp"
+                        android:textColor="@color/secondary_text" />
+
+                    <TextView
+                        android:id="@+id/tvAvailability"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Immédiate"
+                        android:textSize="16sp"
+                        android:textColor="@color/primary_text" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Save Button -->
+            <Button
+                android:id="@+id/btnSaveProfile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@color/primary_color"
+                android:text="Enregistrer les modifications"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardPreferences" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

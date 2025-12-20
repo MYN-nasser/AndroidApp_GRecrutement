@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardApplication"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Status Indicator -->
+        <View
+            android:id="@+id/viewStatus"
+            android:layout_width="4dp"
+            android:layout_height="40dp"
+            android:background="@color/status_pending"
+            app:layout_constraintBottom_toBottomOf="@id/tvJobTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvJobTitle" />
+
+        <!-- Job Title -->
+        <TextView
+            android:id="@+id/tvJobTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Développeur Android Senior"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tvDaysAgo"
+            app:layout_constraintStart_toEndOf="@id/viewStatus"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Days Ago -->
+        <TextView
+            android:id="@+id/tvDaysAgo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Il y a 3 jours"
+            android:textColor="@color/secondary_text"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Company Name -->
+        <TextView
+            android:id="@+id/tvCompanyName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="TechMaroc SARL"
+            android:textColor="@color/secondary_text"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/tvJobTitle"
+            app:layout_constraintStart_toStartOf="@id/tvJobTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvJobTitle" />
+
+        <!-- Status Badge -->
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_status_pending"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:text="En revue"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/tvJobTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvCompanyName" />
+
+        <!-- Location -->
+        <TextView
+            android:id="@+id/tvLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:drawablePadding="4dp"
+            android:drawableStart="@drawable/ic_location_small"
+            android:text="Casablanca"
+            android:textColor="@color/secondary_text"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/tvJobTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvStatus" />
+
+        <!-- Application Date -->
+        <TextView
+            android:id="@+id/tvApplicationDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Postulé: 15 Mars 2024"
+            android:textColor="@color/secondary_text"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="@id/tvJobTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvLocation" />
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:id="@+id/layoutActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvStatus">
+
+            <Button
+                android:id="@+id/btnViewJob"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:backgroundTint="@android:color/transparent"
+                android:text="Voir offre"
+                android:textAllCaps="false"
+                android:textColor="@color/primary_color"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btnWithdraw"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@android:color/transparent"
+                android:text="Retirer"
+                android:textAllCaps="false"
+                android:textColor="@color/red"
+                android:textSize="12sp"
+                style="@style/Widget.MaterialComponents.Button.TextButton" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
