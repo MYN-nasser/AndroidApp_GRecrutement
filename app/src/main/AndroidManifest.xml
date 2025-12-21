@@ -11,15 +11,107 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EMSI_Recrutement">
+
+        <!-- Main/Launcher Activity -->
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Auth Activities -->
+        <activity
+            android:name=".LoginActivity"
+            android:label="Connexion"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".RegisterActivity"
+            android:label="Inscription"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Candidate Activities -->
+        <activity
+            android:name=".DashboardCandidateActivity"
+            android:label="Tableau de bord"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ProfileCandidateActivity"
+            android:label="Mon Profil"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".JobSearchActivity"
+            android:label="Recherche d'emploi"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".JobDetailsActivity"
+            android:label="Détails de l'offre"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".MyApplicationsActivity"
+            android:label="Mes Candidatures"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait" />
+
+        <!-- Recruiter Activities (Add these later) -->
+        <!--
+        <activity android:name=".recruiter.DashboardRecruiterActivity" />
+        <activity android:name=".recruiter.PostJobActivity" />
+        <activity android:name=".recruiter.ManageJobsActivity" />
+        <activity android:name=".recruiter.SearchCVActivity" />
+        <activity android:name=".recruiter.CompanyProfileActivity" />
+        -->
+
+        <!-- Admin Activities (Add these later) -->
+        <!--
+        <activity android:name=".admin.AdminDashboardActivity" />
+        <activity android:name=".admin.ManageUsersActivity" />
+        <activity android:name=".admin.ManageListingsActivity" />
+        <activity android:name=".admin.ReportsActivity" />
+        -->
+
+        <!-- Shared Activities -->
+        <!--
+        <activity android:name=".ForgotPasswordActivity" />
+        <activity android:name=".SettingsActivity" />
+        -->
+
     </application>
+
+    <!-- Permissions (Add as needed) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- For file upload (CV) -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
+    <!-- For Android 13+ -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
+    <!-- Optional: For camera if you add photo upload -->
+    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
 
 </manifest>
