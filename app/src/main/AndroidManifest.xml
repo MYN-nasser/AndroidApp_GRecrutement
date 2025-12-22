@@ -12,7 +12,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EMSI_Recrutement">
         <activity
-            android:name=".MainActivity"
+            android:name=".ProfileCandidateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JobDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MyApplicationsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DashboardCandidateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JobSearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterCandidateActivity"
+            android:exported="true" />
+        <activity
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
