@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_grey"
-    tools:context=".DashboardCandidateActivity">
 
     <!-- App Bar -->
     <com.google.android.material.appbar.MaterialToolbar
@@ -212,15 +211,10 @@
 
         <!-- Search Jobs Button -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/btnSearchJobs"
             android:layout_width="0dp"
             android:layout_height="100dp"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
             app:layout_gravity="fill">
@@ -237,7 +231,6 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_search_job"
-                    app:tint="@color/primary_color" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -251,15 +244,10 @@
 
         <!-- Upload CV Button -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/btnUploadCV"
             android:layout_width="0dp"
             android:layout_height="100dp"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
             app:layout_gravity="fill">
@@ -276,7 +264,6 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_upload_cv"
-                    app:tint="@color/primary_color" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -290,15 +277,10 @@
 
         <!-- My Applications Button -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/btnMyApplications"
             android:layout_width="0dp"
             android:layout_height="100dp"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
             app:layout_gravity="fill">
@@ -315,7 +297,6 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_my_applications"
-                    app:tint="@color/primary_color" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -329,15 +310,10 @@
 
         <!-- Career Tips Button -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/btnCareerTips"
             android:layout_width="0dp"
             android:layout_height="100dp"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
             app:layout_gravity="fill">
@@ -354,7 +330,6 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_career_tips"
-                    app:tint="@color/primary_color" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -365,7 +340,6 @@
                     android:textColor="@color/primary_text" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
     </androidx.gridlayout.widget.GridLayout>
 
     <!-- Recent Jobs Title -->
@@ -406,17 +380,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvRecentJobs"
         tools:listitem="@layout/item_job_horizontal" />
-
-    <!-- Logout Button -->
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Déconnexion"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="16dp"/>
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
