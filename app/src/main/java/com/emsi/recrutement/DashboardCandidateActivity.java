@@ -52,6 +52,7 @@ public class DashboardCandidateActivity extends AppCompatActivity {
 
         // Charger les données utilisateur
         loadUserData();
+        loadStatistics();
 
         setupNavigation();
         setupToolbar();
@@ -113,6 +114,32 @@ public class DashboardCandidateActivity extends AppCompatActivity {
             TextView tvWelcome = findViewById(R.id.tvWelcome);
             if (tvWelcome != null) {
                 tvWelcome.setText("Bonjour, " + currentUser.getPrenom() + " " + currentUser.getNom());
+            }
+        }
+    }
+
+    private void loadStatistics() {
+        if (currentUser != null) {
+            int userId = currentUser.getId();
+
+            // Get statistics counts from database
+            int applicationsCount = dbHelper.getUserApplicationsCount(userId);
+            int interviewsCount = dbHelper.getUserInterviewsCount(userId);
+            int savedJobsCount = dbHelper.getUserSavedJobsCount(userId);
+
+            // Update UI
+            TextView tvApplicationsCount = findViewById(R.id.tvApplicationsCount);
+            TextView tvInterviewsCount = findViewById(R.id.tvInterviewsCount);
+            TextView tvSavedJobsCount = findViewById(R.id.tvSavedJobsCount);
+
+            if (tvApplicationsCount != null) {
+                tvApplicationsCount.setText(String.valueOf(applicationsCount));
+            }
+            if (tvInterviewsCount != null) {
+                tvInterviewsCount.setText(String.valueOf(interviewsCount));
+            }
+            if (tvSavedJobsCount != null) {
+                tvSavedJobsCount.setText(String.valueOf(savedJobsCount));
             }
         }
     }
@@ -201,22 +228,6 @@ public class DashboardCandidateActivity extends AppCompatActivity {
                     return true;
                 }
                 return false;
-            });
-        }
-
-        // Logout button
-        Button btnLogout = findViewById(R.id.btnLogout);
-        if (btnLogout != null) {
-            btnLogout.setOnClickListener(v -> {
-                // Nettoyer les préférences partagées si nécessaire
-                SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
-                prefs.edit().clear().apply();
-
-                // Rediriger vers LoginActivity
-                Intent intent = new Intent(this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
             });
         }
     }

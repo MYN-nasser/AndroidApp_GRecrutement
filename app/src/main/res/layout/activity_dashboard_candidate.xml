@@ -176,6 +176,7 @@
                 android:padding="8dp">
 
                 <TextView
+                    android:id="@+id/tvApplicationsCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="12"
@@ -213,6 +214,7 @@
                 android:padding="8dp">
 
                 <TextView
+                    android:id="@+id/tvInterviewsCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="3"
@@ -250,6 +252,7 @@
                 android:padding="8dp">
 
                 <TextView
+                    android:id="@+id/tvSavedJobsCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="7"
@@ -325,13 +328,13 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_search_job"
+                    android:src="@drawable/ic_saved_jobs"
                     app:tint="@color/primary_color" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Chercher un emploi"
+                    android:text="Offres enregistrées"
                     android:textSize="14sp"
                     android:textAlignment="center"
                     android:textColor="@color/primary_text" />
@@ -448,13 +451,13 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_career_tips"
+                    android:src="@drawable/ic_calendar"
                     app:tint="@color/primary_color" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Conseils carrière"
+                    android:text="Calendrier"
                     android:textSize="14sp"
                     android:textAlignment="center"
                     android:textColor="@color/primary_text" />
@@ -504,16 +507,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvRecentJobs"
         tools:listitem="@layout/item_job_offer_card" />
 
-    <!-- Logout Button -->
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Déconnexion"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="16dp"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -10,7 +10,7 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "recrutement.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     // Table utilisateurs
     public static final String TABLE_USERS = "utilisateurs";
@@ -41,6 +41,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_APPLICATION_JOB_ID = "job_id";
     public static final String COLUMN_APPLICATION_STATUS = "statut"; // En attente, Acceptée, Refusée
     public static final String COLUMN_APPLICATION_DATE = "date_candidature";
+    public static final String COLUMN_APPLICATION_INTERVIEW = "interview_scheduled"; // 0 or 1
+
+    // Table saved jobs (offres enregistrées)
+    public static final String TABLE_SAVED_JOBS = "saved_jobs";
+    public static final String COLUMN_SAVED_ID = "saved_id";
+    public static final String COLUMN_SAVED_USER_ID = "user_id";
+    public static final String COLUMN_SAVED_JOB_ID = "job_id";
+    public static final String COLUMN_SAVED_DATE = "saved_date";
 
     // Requête de création de table utilisateurs
     private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + "(" +
@@ -77,6 +85,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "FOREIGN KEY(" + COLUMN_APPLICATION_JOB_ID + ") REFERENCES " + TABLE_JOBS + "(" + COLUMN_JOB_ID + ")" +
             ");";
 
+    // Requête de création de table saved jobs
+    private static final String CREATE_TABLE_SAVED_JOBS = "CREATE TABLE " + TABLE_SAVED_JOBS + "(" +
+            COLUMN_SAVED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            COLUMN_SAVED_USER_ID + " INTEGER NOT NULL," +
+            COLUMN_SAVED_JOB_ID + " INTEGER NOT NULL," +
+            COLUMN_SAVED_DATE + " TEXT DEFAULT (datetime('now'))," +
+            "FOREIGN KEY(" + COLUMN_SAVED_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_ID + ")," +
+            "FOREIGN KEY(" + COLUMN_SAVED_JOB_ID + ") REFERENCES " + TABLE_JOBS + "(" + COLUMN_JOB_ID + ")," +
+            "UNIQUE(" + COLUMN_SAVED_USER_ID + "," + COLUMN_SAVED_JOB_ID + ")" +
+            ");";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -87,6 +106,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL(CREATE_TABLE_USERS);
             db.execSQL(CREATE_TABLE_JOBS);
             db.execSQL(CREATE_TABLE_APPLICATIONS);
+            db.execSQL(CREATE_TABLE_SAVED_JOBS);
             Log.d("DatabaseHelper", "Tables créées avec succès");
 
             // Ajouter des utilisateurs de test
@@ -209,6 +229,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE " + TABLE_USERS + " ADD COLUMN " + COLUMN_IMAGE_URI + " TEXT");
             } catch (Exception e) {
                 Log.e("DatabaseHelper", "Erreur mise à jour V3: " + e.getMessage());
+            }
+        }
+        if (oldVersion < 4) {
+            try {
+                // Create saved_jobs table
+                db.execSQL(CREATE_TABLE_SAVED_JOBS);
+                // Add interview_scheduled column to candidatures
+                db.execSQL("ALTER TABLE " + TABLE_APPLICATIONS + " ADD COLUMN " + COLUMN_APPLICATION_INTERVIEW
+                        + " INTEGER DEFAULT 0");
+                Log.d("DatabaseHelper", "Mise à jour V4: saved_jobs table et interview_scheduled ajoutés");
+            } catch (Exception e) {
+                Log.e("DatabaseHelper", "Erreur mise à jour V4: " + e.getMessage());
             }
         }
     }
@@ -638,5 +670,122 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public String getDate() {
             return date;
         }
+    }
+
+    // ==================== STATISTICS METHODS ====================
+
+    // Get count of user's applications
+    public int getUserApplicationsCount(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int count = 0;
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_APPLICATIONS +
+                    " WHERE " + COLUMN_APPLICATION_USER_ID + " = ?",
+                    new String[] { String.valueOf(userId) });
+            if (cursor.moveToFirst()) {
+                count = cursor.getInt(0);
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Erreur getUserApplicationsCount: " + e.getMessage());
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return count;
+    }
+
+    // Get count of user's interviews (applications with interview_scheduled = 1)
+    public int getUserInterviewsCount(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int count = 0;
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_APPLICATIONS +
+                    " WHERE " + COLUMN_APPLICATION_USER_ID + " = ? AND " +
+                    COLUMN_APPLICATION_INTERVIEW + " = 1",
+                    new String[] { String.valueOf(userId) });
+            if (cursor.moveToFirst()) {
+                count = cursor.getInt(0);
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Erreur getUserInterviewsCount: " + e.getMessage());
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return count;
+    }
+
+    // Get count of user's saved jobs
+    public int getUserSavedJobsCount(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int count = 0;
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_SAVED_JOBS +
+                    " WHERE " + COLUMN_SAVED_USER_ID + " = ?",
+                    new String[] { String.valueOf(userId) });
+            if (cursor.moveToFirst()) {
+                count = cursor.getInt(0);
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Erreur getUserSavedJobsCount: " + e.getMessage());
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return count;
+    }
+
+    // ==================== SAVED JOBS MANAGEMENT ====================
+
+    // Save a job for a user
+    public boolean saveJob(int userId, int jobId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_SAVED_USER_ID, userId);
+            values.put(COLUMN_SAVED_JOB_ID, jobId);
+            long result = db.insert(TABLE_SAVED_JOBS, null, values);
+            return result != -1;
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Erreur saveJob: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Unsave a job for a user
+    public boolean unsaveJob(int userId, int jobId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            int result = db.delete(TABLE_SAVED_JOBS,
+                    COLUMN_SAVED_USER_ID + " = ? AND " + COLUMN_SAVED_JOB_ID + " = ?",
+                    new String[] { String.valueOf(userId), String.valueOf(jobId) });
+            return result > 0;
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Erreur unsaveJob: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Check if a job is saved by a user
+    public boolean isJobSaved(int userId, int jobId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_SAVED_JOBS +
+                    " WHERE " + COLUMN_SAVED_USER_ID + " = ? AND " + COLUMN_SAVED_JOB_ID + " = ?",
+                    new String[] { String.valueOf(userId), String.valueOf(jobId) });
+            if (cursor.moveToFirst()) {
+                return cursor.getInt(0) > 0;
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Erreur isJobSaved: " + e.getMessage());
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return false;
     }
 }
