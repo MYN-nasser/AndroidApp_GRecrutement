@@ -11,4 +11,8 @@
     <color name="red">#F44336</color>
     <color name="status_pending">#FF9800</color> <!-- Orange pour "En cours" -->
     <color name="chip_background">#FFDDDDDD</color>
+    <color name="card_blue">#E3F2FD</color> <!-- Bleu clair pour les cartes -->
+    <color name="card_green">#E8F5E9</color> <!-- Vert clair pour les cartes -->
+    <color name="card_border_blue">#2196F3</color> <!-- Bleu pour les bordures -->
+    <color name="card_border_green">#4CAF50</color> <!-- Vert pour les bordures (optionnel) -->
 </resources>

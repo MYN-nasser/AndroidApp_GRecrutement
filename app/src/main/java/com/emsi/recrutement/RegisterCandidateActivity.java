@@ -16,13 +16,15 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Calendar;
+
 public class RegisterCandidateActivity extends AppCompatActivity {
 
     // Champs texte
     private TextInputEditText etNom, etPrenom, etEmail, etTelephone,
             etPromo, etPassword, etConfirmPassword;
 
-    // Layouts pour erreurs
+    // Layouts pour erreurs (TextInputLayout permet d'afficher le message rouge en dessous)
     private TextInputLayout tilNom, tilPrenom, tilEmail, tilTelephone,
             tilPromo, tilPassword, tilConfirmPassword;
 
@@ -45,9 +47,10 @@ public class RegisterCandidateActivity extends AppCompatActivity {
         // Initialiser toutes les vues
         initViews();
 
-        // Configurer les écouteurs
+        // Configurer les écouteurs de clics
         setupListeners();
 
+        // Gestion des barres système (pour le design bord à bord)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.register), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -56,7 +59,6 @@ public class RegisterCandidateActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        // Champs texte
         etNom = findViewById(R.id.et_nom);
         etPrenom = findViewById(R.id.et_prenom);
         etEmail = findViewById(R.id.et_email);
@@ -65,7 +67,6 @@ public class RegisterCandidateActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.et_password);
         etConfirmPassword = findViewById(R.id.et_confirm_password);
 
-        // Layouts d'erreur
         tilNom = findViewById(R.id.til_nom);
         tilPrenom = findViewById(R.id.til_prenom);
         tilEmail = findViewById(R.id.til_email);
@@ -74,7 +75,6 @@ public class RegisterCandidateActivity extends AppCompatActivity {
         tilPassword = findViewById(R.id.til_password);
         tilConfirmPassword = findViewById(R.id.til_confirm_password);
 
-        // Boutons et textes
         btnUploadCv = findViewById(R.id.btn_upload_cv);
         btnRegister = findViewById(R.id.btn_register);
         tvCvStatus = findViewById(R.id.tv_cv_status);
@@ -82,42 +82,27 @@ public class RegisterCandidateActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        // Bouton Upload CV
-        btnUploadCv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: Implémenter l'upload de fichiers
-                Toast.makeText(RegisterCandidateActivity.this,
-                        "Fonctionnalité upload à implémenter",
-                        Toast.LENGTH_SHORT).show();
-                tvCvStatus.setText("⚠️ Aucun fichier sélectionné");
-            }
-        });
-
         // Bouton d'inscription
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                registerCandidate();
-            }
+        btnRegister.setOnClickListener(v -> registerCandidate());
+
+        // Lien vers la page de connexion
+        tvLoginLink.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterCandidateActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
 
-        // Lien vers connexion
-        tvLoginLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RegisterCandidateActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        // Bouton Upload (à implémenter plus tard)
+        btnUploadCv.setOnClickListener(v -> {
+            Toast.makeText(this, "Fonctionnalité upload à venir", Toast.LENGTH_SHORT).show();
         });
     }
 
     private void registerCandidate() {
-        // Réinitialiser toutes les erreurs
+        // 1. Réinitialiser les erreurs visuelles
         clearAllErrors();
 
-        // Récupérer les valeurs
+        // 2. Récupérer les valeurs saisies
         String nom = etNom.getText().toString().trim();
         String prenom = etPrenom.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
@@ -128,112 +113,56 @@ public class RegisterCandidateActivity extends AppCompatActivity {
 
         boolean hasError = false;
 
-        // Validation du nom
+        // --- VALIDATIONS ---
+
         if (nom.isEmpty()) {
             tilNom.setError("Le nom est obligatoire");
             hasError = true;
-        } else if (nom.length() < 2) {
-            tilNom.setError("Nom trop court");
-            hasError = true;
         }
 
-        // Validation du prénom
         if (prenom.isEmpty()) {
             tilPrenom.setError("Le prénom est obligatoire");
             hasError = true;
-        } else if (prenom.length() < 2) {
-            tilPrenom.setError("Prénom trop court");
+        }
+
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            tilEmail.setError("Email invalide");
             hasError = true;
         }
 
-        // Validation de l'email
-        if (email.isEmpty()) {
-            tilEmail.setError("L'email est obligatoire");
-            hasError = true;
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            tilEmail.setError("Format d'email invalide");
-            hasError = true;
-        } else if (!email.toLowerCase().contains("emsi") && !email.toLowerCase().contains("esi")) {
-            tilEmail.setError("Veuillez utiliser votre email EMSI");
-            hasError = true;
-        } else if (dbHelper.checkEmailExists(email)) {
-            tilEmail.setError("Cet email est déjà utilisé");
-            hasError = true;
-        }
-
-        // Validation de l'année de promotion
         if (promo.isEmpty()) {
-            tilPromo.setError("L'année de promotion est obligatoire");
+            tilPromo.setError("Année de promotion obligatoire");
             hasError = true;
-        } else if (promo.length() != 4) {
-            tilPromo.setError("Format invalide (ex: 2024)");
-            hasError = true;
-        } else {
-            try {
-                int annee = Integer.parseInt(promo);
-                int anneeCourante = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
-                if (annee < 2000 || annee > anneeCourante + 2) {
-                    tilPromo.setError("Année invalide (2000-" + (anneeCourante + 2) + ")");
-                    hasError = true;
-                }
-            } catch (NumberFormatException e) {
-                tilPromo.setError("Doit être un nombre");
-                hasError = true;
-            }
         }
 
-        // Validation du mot de passe
-        if (password.isEmpty()) {
-            tilPassword.setError("Le mot de passe est obligatoire");
-            hasError = true;
-        } else if (password.length() < 6) {
+        if (password.length() < 6) {
             tilPassword.setError("Minimum 6 caractères");
             hasError = true;
         }
 
-        // Validation de la confirmation
-        if (confirmPassword.isEmpty()) {
-            tilConfirmPassword.setError("Confirmez le mot de passe");
-            hasError = true;
-        } else if (!password.equals(confirmPassword)) {
+        if (!password.equals(confirmPassword)) {
             tilConfirmPassword.setError("Les mots de passe ne correspondent pas");
             hasError = true;
         }
 
-        // Si aucune erreur, créer le compte
+        // 3. Si aucune erreur, on procède à l'enregistrement
         if (!hasError) {
-            // Si téléphone est vide, mettre null
-            String tel = telephone.isEmpty() ? "" : telephone;
-
-            // Créer l'utilisateur dans la base
+            // Ajouter à la base de données
             long result = dbHelper.addUser(email, password, nom, prenom, "candidat");
 
             if (result != -1) {
-                // Succès
-                Toast.makeText(this,
-                        "✅ Compte créé avec succès!\n\n" +
-                                "Nom: " + prenom + " " + nom + "\n" +
-                                "Email: " + email + "\n" +
-                                "Promotion: " + promo,
-                        Toast.LENGTH_LONG).show();
+                // SUCCÈS : Redirection vers le Dashboard
+                Toast.makeText(this, "Bienvenue " + prenom + " !", Toast.LENGTH_SHORT).show();
 
-                // Rediriger vers la page de connexion
-                Intent intent = new Intent(this, LoginActivity.class);
-                intent.putExtra("EMAIL", email);
+                Intent intent = new Intent(RegisterCandidateActivity.this, DashboardCandidateActivity.class);
+                intent.putExtra("USER_EMAIL", email);
                 startActivity(intent);
-                finish();
 
+                // On ferme cette page pour ne pas pouvoir revenir au formulaire avec le bouton "Retour"
+                finish();
             } else {
-                // Erreur lors de la création
-                Toast.makeText(this,
-                        "❌ Erreur lors de la création du compte",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Erreur lors de la création du compte", Toast.LENGTH_SHORT).show();
             }
-        } else {
-            // Afficher un message général d'erreur
-            Toast.makeText(this,
-                    "Veuillez corriger les erreurs dans le formulaire",
-                    Toast.LENGTH_SHORT).show();
         }
     }
 

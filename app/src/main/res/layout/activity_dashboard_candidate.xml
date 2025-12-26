@@ -1,23 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Main Content -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_grey">
+
+<androidx.core.widget.NestedScrollView
+    android:id="@+id/nestedScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/background_grey"
+    android:paddingBottom="100dp"
     tools:context=".DashboardCandidateActivity">
 
-    <!-- App Bar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/primary_color"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Tableau de bord"
-        app:titleTextColor="@android:color/white"
-        app:navigationIcon="@drawable/ic_menu" />
+        app:titleCentered="true"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <!-- Burger Menu Icon (Left) -->
+            <ImageView
+                android:id="@+id/ivBurgerMenu"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_menu_burger"
+                android:contentDescription="Menu"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginEnd="16dp" />
+
+            <!-- Notification Icon (Left, after burger) -->
+            <ImageView
+                android:id="@+id/ivNotification"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_toEndOf="@id/ivBurgerMenu"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_notifications"
+                android:contentDescription="Notifications"
+                app:tint="@android:color/white"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <!-- Centered Title -->
+            <TextView
+                android:id="@+id/tvToolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="EMSI Recrutement"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <!-- Profile Icon (Right) -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_profile_placeholder"
+                app:civ_border_width="2dp"
+                app:civ_border_color="@android:color/white"
+                android:contentDescription="Profil"
+                android:clickable="true"
+                android:focusable="true"/>
+
+        </RelativeLayout>
+
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <!-- Welcome Card -->
     <androidx.cardview.widget.CardView
@@ -78,9 +161,10 @@
         <!-- Applications Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
+            android:minHeight="90dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp">
 
@@ -114,9 +198,10 @@
         <!-- Interviews Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginEnd="8dp"
+            android:layout_marginHorizontal="4dp"
+            android:minHeight="90dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp">
 
@@ -150,8 +235,10 @@
         <!-- Saved Jobs Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:minHeight="90dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp">
 
@@ -214,7 +301,8 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/btnSearchJobs"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             android:layout_marginStart="8dp"
@@ -225,6 +313,7 @@
             app:cardElevation="4dp"
             app:layout_gravity="fill">
             <LinearLayout
+                android:id="@+id/layoutSearchJobs"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -253,7 +342,8 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/btnUploadCV"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             android:layout_marginStart="8dp"
@@ -264,6 +354,7 @@
             app:cardElevation="4dp"
             app:layout_gravity="fill">
             <LinearLayout
+                android:id="@+id/layoutUploadCV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -292,7 +383,8 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/btnMyApplications"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             android:layout_marginStart="8dp"
@@ -303,6 +395,7 @@
             app:cardElevation="4dp"
             app:layout_gravity="fill">
             <LinearLayout
+                android:id="@+id/layoutMyApplications"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -331,7 +424,8 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/btnCareerTips"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             android:layout_marginStart="8dp"
@@ -342,6 +436,7 @@
             app:cardElevation="4dp"
             app:layout_gravity="fill">
             <LinearLayout
+                android:id="@+id/layoutCareerTips"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -399,13 +494,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:nestedScrollingEnabled="false"
+        android:clipToPadding="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvRecentJobs"
-        tools:listitem="@layout/item_job_horizontal" />
+        tools:listitem="@layout/item_job_offer_card" />
 
     <!-- Logout Button -->
     <Button
@@ -418,14 +515,31 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="16dp"/>
 
-    <!-- Bottom Navigation -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        app:labelVisibilityMode="labeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav_candidate" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
+
+<!-- Bottom Navigation -->
+<com.google.android.material.bottomnavigation.BottomNavigationView
+    android:id="@+id/bottomNavigationView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:elevation="8dp"
+    app:labelVisibilityMode="labeled"
+    app:layout_anchor="@id/nestedScrollView"
+    app:layout_anchorGravity="bottom"
+    app:menu="@menu/bottom_nav_candidate" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <!-- Navigation Drawer -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_drawer"
+        app:menu="@menu/drawer_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

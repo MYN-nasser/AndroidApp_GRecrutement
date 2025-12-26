@@ -3,18 +3,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardJobOffer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
     android:layout_marginBottom="12dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
-    app:strokeColor="?attr/colorPrimaryVariant"
-    app:strokeWidth="1dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:strokeColor="@color/primary_color"
+    app:strokeWidth="2dp"
+    app:cardBackgroundColor="@android:color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutCardContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="14dp"
+        android:background="@android:color/white">
 
         <ImageView
             android:id="@+id/iv_company_logo"
@@ -29,11 +34,13 @@
             android:id="@+id/tv_job_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textSize="18sp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:maxLines="2"
             android:ellipsize="end"
+            android:lineSpacingExtra="2dp"
             tools:text="Développeur Android Senior (Java/Kotlin)"
             app:layout_constraintTop_toTopOf="@id/iv_company_logo"
             app:layout_constraintStart_toEndOf="@id/iv_company_logo"
@@ -75,9 +82,11 @@
 
         <ImageButton
             android:id="@+id/btn_save_job"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:contentDescription="Enregistrer l'offre"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
