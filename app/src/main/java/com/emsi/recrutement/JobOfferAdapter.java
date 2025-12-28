@@ -18,9 +18,11 @@ public class JobOfferAdapter extends RecyclerView.Adapter<JobOfferAdapter.JobVie
 
     private List<JobOffer> jobOffers;
     private OnJobClickListener listener;
+    private int currentUserId;
 
     public interface OnJobClickListener {
         void onJobClick(JobOffer job);
+
         void onSaveJobClick(JobOffer job);
     }
 
@@ -40,6 +42,7 @@ public class JobOfferAdapter extends RecyclerView.Adapter<JobOfferAdapter.JobVie
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
         JobOffer job = jobOffers.get(position);
+        holder.setCurrentUserId(currentUserId);
         holder.bind(job);
     }
 
@@ -53,13 +56,20 @@ public class JobOfferAdapter extends RecyclerView.Adapter<JobOfferAdapter.JobVie
         notifyDataSetChanged();
     }
 
+    public void setCurrentUserId(int userId) {
+        this.currentUserId = userId;
+    }
+
     class JobViewHolder extends RecyclerView.ViewHolder {
         private TextView tvJobTitle;
         private TextView tvCompanyName;
         private TextView tvLocationType;
+        private TextView tvPublicationDate;
         private ImageButton btnSaveJob;
         private MaterialCardView cardView;
         private View layoutCardContent;
+        private DatabaseHelper dbHelper;
+        private int currentUserId;
 
         public JobViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,7 +78,10 @@ public class JobOfferAdapter extends RecyclerView.Adapter<JobOfferAdapter.JobVie
             tvJobTitle = itemView.findViewById(R.id.tv_job_title);
             tvCompanyName = itemView.findViewById(R.id.tv_company_name);
             tvLocationType = itemView.findViewById(R.id.tv_location_type);
+            tvPublicationDate = itemView.findViewById(R.id.tv_publication_date);
             btnSaveJob = itemView.findViewById(R.id.btn_save_job);
+
+            dbHelper = new DatabaseHelper(itemView.getContext());
 
             itemView.setOnClickListener(v -> {
                 if (listener != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
@@ -97,7 +110,7 @@ public class JobOfferAdapter extends RecyclerView.Adapter<JobOfferAdapter.JobVie
             if (tvCompanyName != null && job.getCompany() != null) {
                 tvCompanyName.setText(job.getCompany());
             }
-            
+
             if (tvLocationType != null) {
                 String locationType = job.getLocation() != null ? job.getLocation() : "";
                 if (job.getType() != null && !job.getType().isEmpty()) {
@@ -109,7 +122,25 @@ public class JobOfferAdapter extends RecyclerView.Adapter<JobOfferAdapter.JobVie
                 }
                 tvLocationType.setText(locationType);
             }
+
+            // Display publication date
+            if (tvPublicationDate != null) {
+                tvPublicationDate.setText("Il y a 2 jours"); // Placeholder - will be dynamic later
+            }
+
+            // Update bookmark icon based on saved status
+            if (btnSaveJob != null && currentUserId > 0) {
+                boolean isSaved = dbHelper.isJobSaved(currentUserId, job.getId());
+                if (isSaved) {
+                    btnSaveJob.setImageResource(R.drawable.ic_bookmark_filled);
+                } else {
+                    btnSaveJob.setImageResource(R.drawable.ic_bookmark_outline);
+                }
+            }
+        }
+
+        public void setCurrentUserId(int userId) {
+            this.currentUserId = userId;
         }
     }
 }
-
