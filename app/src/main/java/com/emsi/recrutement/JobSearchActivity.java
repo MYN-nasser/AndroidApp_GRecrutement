@@ -67,9 +67,14 @@ public class JobSearchActivity extends AppCompatActivity implements JobOfferAdap
         searchView = findViewById(R.id.search_view_offers);
     }
 
-
     private void setupRecyclerView() {
         adapter = new JobOfferAdapter(null, this);
+
+        // Set current user ID for save/unsave functionality
+        if (currentUser != null) {
+            adapter.setCurrentUserId(currentUser.getId());
+        }
+
         rvJobOffers.setLayoutManager(new LinearLayoutManager(this));
         rvJobOffers.setAdapter(adapter);
     }
@@ -123,8 +128,8 @@ public class JobSearchActivity extends AppCompatActivity implements JobOfferAdap
 
     @Override
     public void onSaveJobClick(JobOffer job) {
-        // TODO: Implémenter la sauvegarde d'offre
-        Toast.makeText(this, "Fonctionnalité de sauvegarde à venir", Toast.LENGTH_SHORT).show();
+        // Save functionality is handled by the adapter
+        // This callback can be used for additional actions if needed
     }
 
     @Override

@@ -91,8 +91,24 @@ public class JobOfferAdapter extends RecyclerView.Adapter<JobOfferAdapter.JobVie
 
             if (btnSaveJob != null) {
                 btnSaveJob.setOnClickListener(v -> {
-                    if (listener != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
-                        listener.onSaveJobClick(jobOffers.get(getAdapterPosition()));
+                    if (listener != null && getAdapterPosition() != RecyclerView.NO_POSITION && currentUserId > 0) {
+                        JobOffer job = jobOffers.get(getAdapterPosition());
+
+                        // Check current saved state
+                        boolean isSaved = dbHelper.isJobSaved(currentUserId, job.getId());
+
+                        if (isSaved) {
+                            // Unsave the job
+                            dbHelper.unsaveJob(currentUserId, job.getId());
+                            btnSaveJob.setImageResource(R.drawable.ic_bookmark_outline);
+                        } else {
+                            // Save the job
+                            dbHelper.saveJob(currentUserId, job.getId());
+                            btnSaveJob.setImageResource(R.drawable.ic_bookmark_filled);
+                        }
+
+                        // Notify listener for statistics update
+                        listener.onSaveJobClick(job);
                     }
                 });
             }

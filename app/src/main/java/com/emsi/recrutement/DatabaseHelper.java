@@ -7,10 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "recrutement.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // Table utilisateurs
     public static final String TABLE_USERS = "utilisateurs";
@@ -33,6 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_JOB_DESCRIPTION = "description";
     public static final String COLUMN_JOB_REQUIREMENTS = "exigences";
     public static final String COLUMN_JOB_TYPE = "type_emploi"; // CDI, CDD, Stage, etc.
+    public static final String COLUMN_JOB_LOGO = "logo_entreprise"; // URL or path to company logo
 
     // Table candidatures
     public static final String TABLE_APPLICATIONS = "candidatures";
@@ -71,7 +75,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_JOB_SALARY + " TEXT," +
             COLUMN_JOB_DESCRIPTION + " TEXT," +
             COLUMN_JOB_REQUIREMENTS + " TEXT," +
-            COLUMN_JOB_TYPE + " TEXT" +
+            COLUMN_JOB_TYPE + " TEXT," +
+            COLUMN_JOB_LOGO + " TEXT" +
             ");";
 
     // Requête de création de table candidatures
@@ -241,6 +246,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Log.d("DatabaseHelper", "Mise à jour V4: saved_jobs table et interview_scheduled ajoutés");
             } catch (Exception e) {
                 Log.e("DatabaseHelper", "Erreur mise à jour V4: " + e.getMessage());
+            }
+        }
+        if (oldVersion < 5) {
+            try {
+                // Add logo_entreprise column to offres_emploi table
+                db.execSQL("ALTER TABLE " + TABLE_JOBS + " ADD COLUMN " + COLUMN_JOB_LOGO + " TEXT");
+                Log.d("DatabaseHelper", "Mise à jour V5: colonne logo_entreprise ajoutée");
+            } catch (Exception e) {
+                Log.e("DatabaseHelper", "Erreur mise à jour V5: " + e.getMessage());
             }
         }
     }
@@ -787,5 +801,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.close();
         }
         return false;
+    }
+
+    // Get all saved jobs for a user
+    public List<JobOffer> getSavedJobs(int userId) {
+        List<JobOffer> savedJobs = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        try {
+            String query = "SELECT j.* FROM " + TABLE_JOBS + " j " +
+                    "INNER JOIN " + TABLE_SAVED_JOBS + " s ON j." + COLUMN_JOB_ID + " = s." + COLUMN_SAVED_JOB_ID +
+                    " WHERE s." + COLUMN_SAVED_USER_ID + " = ? " +
+                    "ORDER BY s." + COLUMN_SAVED_DATE + " DESC";
+
+            cursor = db.rawQuery(query, new String[] { String.valueOf(userId) });
+
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_JOB_ID));
+                String title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_JOB_TITLE));
+                String company = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_JOB_COMPANY));
+                String location = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_JOB_LOCATION));
+                String salary = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_JOB_SALARY));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_JOB_DESCRIPTION));
+                String requirements = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_JOB_REQUIREMENTS));
+                String type = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_JOB_TYPE));
+
+                savedJobs.add(new JobOffer(id, title, company, location, salary, description, requirements, type));
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Erreur getSavedJobs: " + e.getMessage());
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+
+        return savedJobs;
     }
 }

@@ -150,14 +150,15 @@ public class DashboardCandidateActivity extends AppCompatActivity {
         // Refresh user data and profile image when returning from profile screen
         loadUserData();
         loadProfileImage();
+        loadStatistics(); // Refresh statistics when returning to dashboard
     }
 
     private void setupNavigation() {
-        // Search Jobs - attacher le listener au LinearLayout interne
+        // Saved Jobs quick action
         View searchJobsLayout = findViewById(R.id.layoutSearchJobs);
         if (searchJobsLayout != null) {
             searchJobsLayout.setOnClickListener(v -> {
-                Intent intent = new Intent(this, JobSearchActivity.class);
+                Intent intent = new Intent(this, SavedJobsActivity.class);
                 intent.putExtra("USER_EMAIL", userEmail);
                 startActivity(intent);
             });
@@ -258,9 +259,16 @@ public class DashboardCandidateActivity extends AppCompatActivity {
 
                 @Override
                 public void onSaveJobClick(JobOffer job) {
-                    // Fonctionnalité de sauvegarde à implémenter si nécessaire
+                    // Refresh statistics when job is saved/unsaved
+                    loadStatistics();
                 }
             });
+
+            // Set current user ID for save/unsave functionality
+            if (currentUser != null) {
+                recentJobsAdapter.setCurrentUserId(currentUser.getId());
+            }
+
             rvRecentJobs.setAdapter(recentJobsAdapter);
         }
     }
@@ -310,7 +318,9 @@ public class DashboardCandidateActivity extends AppCompatActivity {
                     intent.putExtra("USER_EMAIL", userEmail);
                     startActivity(intent);
                 } else if (itemId == R.id.nav_favorites) {
-                    Toast.makeText(this, "Favoris - Bientôt disponible", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, SavedJobsActivity.class);
+                    intent.putExtra("USER_EMAIL", userEmail);
+                    startActivity(intent);
                 } else if (itemId == R.id.nav_applications) {
                     Intent intent = new Intent(this, MyApplicationsActivity.class);
                     intent.putExtra("USER_EMAIL", userEmail);

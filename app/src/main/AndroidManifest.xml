@@ -39,6 +39,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".SavedJobsActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".JobSearchActivity"
             android:exported="false" />
 
