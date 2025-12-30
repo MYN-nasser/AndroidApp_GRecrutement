@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white">
+
+        <!-- Header with icon and delete button -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:background="#F5F5F5">
+
+            <ImageView
+                android:id="@+id/ivPDFIcon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_pdf"
+                android:contentDescription="PDF"
+                app:tint="@color/red" />
+
+            <ImageButton
+                android:id="@+id/btnDeleteCV"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_delete"
+                android:contentDescription="Supprimer"
+                app:tint="@color/secondary_text" />
+
+        </RelativeLayout>
+
+        <!-- CV Content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvCVTitre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CV Développeur"
+                android:textSize="16sp"
+                android:textColor="@color/primary_text"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tvCVDomaine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Informatique"
+                android:textSize="13sp"
+                android:textColor="@color/primary_color"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <!-- Preview/Description -->
+            <TextView
+                android:id="@+id/tvCVPreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Développeur Full Stack avec 5 ans d'expérience..."
+                android:textSize="12sp"
+                android:textColor="@color/secondary_text"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:lineSpacingExtra="2dp" />
+
+            <!-- Footer info -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvCVFileName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="cv_dev.pdf"
+                    android:textSize="11sp"
+                    android:textColor="@color/secondary_text"
+                    android:maxLines="1"
+                    android:ellipsize="middle"
+                    android:drawablePadding="4dp"
+                    app:drawableStartCompat="@drawable/ic_pdf"
+                    app:drawableTint="@color/secondary_text" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvCVDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="30/12/2024"
+                android:textSize="10sp"
+                android:textColor="@color/secondary_text" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -151,6 +151,15 @@ public class DashboardCandidateActivity extends AppCompatActivity {
         loadUserData();
         loadProfileImage();
         loadStatistics(); // Refresh statistics when returning to dashboard
+
+        // Refresh recent jobs list to update save states
+        if (recentJobsAdapter != null && dbHelper != null) {
+            List<JobOffer> recentJobs = dbHelper.getAllJobs();
+            if (recentJobs.size() > 5) {
+                recentJobs = recentJobs.subList(0, 5);
+            }
+            recentJobsAdapter.updateJobs(recentJobs);
+        }
     }
 
     private void setupNavigation() {
@@ -164,11 +173,11 @@ public class DashboardCandidateActivity extends AppCompatActivity {
             });
         }
 
-        // Upload CV - attacher le listener au LinearLayout interne
+        // Upload CV - redirect to CV management screen
         View uploadCvLayout = findViewById(R.id.layoutUploadCV);
         if (uploadCvLayout != null) {
             uploadCvLayout.setOnClickListener(v -> {
-                Intent intent = new Intent(this, ProfileCandidateActivity.class);
+                Intent intent = new Intent(this, MyCVsActivity.class);
                 intent.putExtra("USER_EMAIL", userEmail);
                 startActivity(intent);
             });
@@ -312,25 +321,29 @@ public class DashboardCandidateActivity extends AppCompatActivity {
             // Handle menu item clicks
             navigationView.setNavigationItemSelectedListener(item -> {
                 int itemId = item.getItemId();
+                Intent intent; // Declare intent here to be used in multiple branches
 
                 if (itemId == R.id.nav_profile) {
-                    Intent intent = new Intent(this, ProfileCandidateActivity.class);
+                    intent = new Intent(this, ProfileCandidateActivity.class);
                     intent.putExtra("USER_EMAIL", userEmail);
                     startActivity(intent);
                 } else if (itemId == R.id.nav_favorites) {
-                    Intent intent = new Intent(this, SavedJobsActivity.class);
+                    intent = new Intent(this, SavedJobsActivity.class);
                     intent.putExtra("USER_EMAIL", userEmail);
                     startActivity(intent);
                 } else if (itemId == R.id.nav_applications) {
-                    Intent intent = new Intent(this, MyApplicationsActivity.class);
+                    intent = new Intent(this, MyApplicationsActivity.class);
                     intent.putExtra("USER_EMAIL", userEmail);
                     startActivity(intent);
                 } else if (itemId == R.id.nav_cv) {
-                    Toast.makeText(this, "Mes CV - Bientôt disponible", Toast.LENGTH_SHORT).show();
+                    // Navigate to MyCVsActivity
+                    intent = new Intent(this, MyCVsActivity.class);
+                    intent.putExtra("USER_EMAIL", userEmail);
+                    startActivity(intent);
                 } else if (itemId == R.id.nav_calendar) {
                     Toast.makeText(this, "Calendrier - Bientôt disponible", Toast.LENGTH_SHORT).show();
                 } else if (itemId == R.id.nav_career) {
-                    Intent intent = new Intent(this, CareerTipsActivity.class);
+                    intent = new Intent(this, CareerTipsActivity.class);
                     intent.putExtra("USER_EMAIL", userEmail);
                     startActivity(intent);
                 } else if (itemId == R.id.nav_logout) {

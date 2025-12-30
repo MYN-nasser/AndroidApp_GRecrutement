@@ -61,6 +61,18 @@ public class JobSearchActivity extends AppCompatActivity implements JobOfferAdap
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh job list to update save states
+        String currentQuery = searchView.getQuery().toString();
+        if (currentQuery.isEmpty()) {
+            loadAllJobs();
+        } else {
+            searchJobs(currentQuery);
+        }
+    }
+
     private void initViews() {
         rvJobOffers = findViewById(R.id.rv_job_offers);
         tvResultsCount = findViewById(R.id.tv_results_count);

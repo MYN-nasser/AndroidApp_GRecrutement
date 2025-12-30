@@ -1,295 +1,291 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_grey"
-    tools:context=".JobDetailsActivity">
+    android:background="@color/background_grey">
 
-    <!-- App Bar -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsingToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            app:contentScrim="@color/primary_color"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/toolbar">
-
-            <!-- Background Image -->
-            <ImageView
-                android:id="@+id/ivCompanyBackground"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/bg_company"
-                app:layout_collapseMode="parallax" />
-
-            <!-- Toolbar -->
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-            <!-- Company Info Overlay -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@drawable/bg_gradient"
-                android:orientation="vertical"
-                android:padding="20dp"
-                app:layout_collapseMode="parallax">
-
-                <TextView
-                    android:id="@+id/tvJobTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Développeur Android Senior"
-                    android:textColor="@android:color/white"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvCompanyName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="TechMaroc SARL"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tvLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="4dp"
-                        android:drawableStart="@drawable/ic_location_white"
-                        android:text="Casablanca"
-                        android:textColor="@android:color/white"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/tvSalary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:drawablePadding="4dp"
-                        android:drawableStart="@drawable/ic_money_white"
-                        android:text="18K - 25K MAD"
-                        android:textColor="@android:color/white"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-
-    <!-- Scroll Content -->
+    <!-- Scrollable Content -->
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="100dp">
+            android:paddingBottom="16dp">
 
-            <!-- Cards Row -->
-            <LinearLayout
+            <!-- Toolbar / Header Area -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:background="@color/primary_color"
+                android:paddingBottom="24dp">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:navigationIcon="@drawable/ic_arrow_back" />
+
+                <!-- Company Logo -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvCompanyLogo"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="24dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+                    <ImageView
+                        android:id="@+id/ivCompanyLogo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/bg_logo_placeholder"
+                        tools:ignore="ContentDescription" />
+                </androidx.cardview.widget.CardView>
+
+                <!-- Job Title -->
+                <TextView
+                    android:id="@+id/tvJobTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Senior Android Developer"
+                    android:textColor="@android:color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cvCompanyLogo" />
+
+                <!-- Company & Location Row -->
+                <LinearLayout
+                    android:id="@+id/headerInfoLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="@+id/tvJobTitle"
+                    app:layout_constraintStart_toStartOf="@+id/tvJobTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/tvJobTitle">
+
+                    <TextView
+                        android:id="@+id/tvCompanyName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tech Solutions Inc."
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:text="•"
+                        android:textColor="@android:color/white"
+                        android:alpha="0.7" />
+
+                    <TextView
+                        android:id="@+id/tvLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Casablanca, Maroc"
+                        android:textColor="@android:color/white"
+                        android:alpha="0.9"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <!-- Publication Date -->
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Publié il y a 2 jours"
+                    android:textColor="@android:color/white"
+                    android:alpha="0.8"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="@+id/tvJobTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/headerInfoLayout" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Tags Row (Salary, Type, Level) -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:weightSum="3">
+                android:clipToPadding="false"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingVertical="4dp"
+                android:scrollbars="none">
 
-                <!-- Job Type -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="80dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="2dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="8dp">
+                    <!-- Contract Type Badge -->
+                    <TextView
+                        android:id="@+id/tvContractType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_tag_light"
+                        android:backgroundTint="#E3F2FD"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:text="CDI"
+                        android:textColor="#1976D2"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_contract"
-                            app:tint="@color/primary_color" />
+                    <!-- Salary Badge -->
+                    <TextView
+                        android:id="@+id/tvSalary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:background="@drawable/bg_tag_light"
+                        android:backgroundTint="#E8F5E9"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:text="15k - 20k MAD"
+                        android:textColor="#388E3C"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:gravity="center"
-                            android:text="CDI"
-                            android:textColor="@color/primary_text"
-                            android:textSize="12sp" />
+                    <!-- Experience Badge -->
+                    <TextView
+                        android:id="@+id/tvExperience"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_tag_light"
+                        android:backgroundTint="#FFF3E0"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:text="+3 ans"
+                        android:textColor="#F57C00"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Type"
-                            android:textColor="@color/secondary_text"
-                            android:textSize="10sp" />
+                </LinearLayout>
+            </HorizontalScrollView>
 
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="24dp"
+                android:background="#E0E0E0" />
 
-                <!-- Experience -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="80dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="2dp">
+            <!-- Description Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="24dp"
+                android:text="Description du poste"
+                android:textColor="@color/primary_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="8dp">
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="12dp"
+                android:lineSpacingExtra="4dp"
+                android:text="Lorem ipsum dolor sit amet..."
+                android:textColor="@color/secondary_text"
+                android:textSize="15sp" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            app:tint="@color/primary_color" />
+            <!-- Requirements Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="24dp"
+                android:text="Compétences requises"
+                android:textColor="@color/primary_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:gravity="center"
-                            android:text="3-5 ans"
-                            android:textColor="@color/primary_text"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Expérience"
-                            android:textColor="@color/secondary_text"
-                            android:textSize="10sp" />
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Remote -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="80dp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="2dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="8dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_remote"
-                            app:tint="@color/primary_color" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:gravity="center"
-                            android:text="Hybride"
-                            android:textColor="@color/primary_text"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Télétravail"
-                            android:textColor="@color/secondary_text"
-                            android:textSize="10sp" />
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tvRequirements"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="24dp"
+                android:lineSpacingExtra="4dp"
+                android:text="• Java / Kotlin\n• Android SDK\n• Git"
+                android:textColor="@color/secondary_text"
+                android:textSize="15sp" />
 
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
 
-
-    <!-- Bottom Bar -->
+    <!-- Bottom Action Bar -->
     <LinearLayout
+        android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
         android:background="@android:color/white"
-        android:elevation="8dp"
+        android:elevation="16dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- Save -->
-        <Button
+        <!-- Icon-only Save Button -->
+        <ImageButton
             android:id="@+id/btnSaveJob"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@android:color/transparent"
-            android:drawableStart="@drawable/ic_bookmark_border"
-            android:drawablePadding="8dp"
-            android:text="Sauvegarder"
-            android:textAllCaps="false"
-            android:textColor="@color/primary_color"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Sauvegarder"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_bookmark_border"
+            app:tint="#9E9E9E" />
 
-        <!-- Apply -->
-        <Button
+        <!-- Apply Button with Icon -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnApplyNow"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:layout_marginStart="12dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
             android:backgroundTint="@color/primary_color"
             android:text="Postuler maintenant"
-            android:textAllCaps="false"
             android:textColor="@android:color/white"
-            style="@style/Widget.MaterialComponents.Button" />
+            android:textSize="16sp"
+            app:cornerRadius="8dp"
+            app:icon="@drawable/ic_upload"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconTint="@android:color/white" />
 
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

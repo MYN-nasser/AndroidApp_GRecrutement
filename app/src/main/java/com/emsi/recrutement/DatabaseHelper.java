@@ -13,7 +13,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "recrutement.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     // Table utilisateurs
     public static final String TABLE_USERS = "utilisateurs";
@@ -53,6 +53,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_SAVED_USER_ID = "user_id";
     public static final String COLUMN_SAVED_JOB_ID = "job_id";
     public static final String COLUMN_SAVED_DATE = "saved_date";
+
+    // Table CVs
+    public static final String TABLE_CVS = "cvs";
+    public static final String COLUMN_CV_ID = "cv_id";
+    public static final String COLUMN_CV_USER_ID = "user_id";
+    public static final String COLUMN_CV_TITRE = "titre";
+    public static final String COLUMN_CV_DOMAINE = "domaine";
+    public static final String COLUMN_CV_FILE_URI = "file_uri";
+    public static final String COLUMN_CV_FILE_NAME = "file_name";
+    public static final String COLUMN_CV_UPLOAD_DATE = "upload_date";
 
     // Requête de création de table utilisateurs
     private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + "(" +
@@ -101,6 +111,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "UNIQUE(" + COLUMN_SAVED_USER_ID + "," + COLUMN_SAVED_JOB_ID + ")" +
             ");";
 
+    // Requête de création de table CVs
+    private static final String CREATE_TABLE_CVS = "CREATE TABLE " + TABLE_CVS + "(" +
+            COLUMN_CV_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            COLUMN_CV_USER_ID + " INTEGER NOT NULL," +
+            COLUMN_CV_TITRE + " TEXT NOT NULL," +
+            COLUMN_CV_DOMAINE + " TEXT," +
+            COLUMN_CV_FILE_URI + " TEXT NOT NULL," +
+            COLUMN_CV_FILE_NAME + " TEXT NOT NULL," +
+            COLUMN_CV_UPLOAD_DATE + " TEXT NOT NULL," +
+            "FOREIGN KEY(" + COLUMN_CV_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_ID + ")" +
+            ");";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -112,6 +134,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL(CREATE_TABLE_JOBS);
             db.execSQL(CREATE_TABLE_APPLICATIONS);
             db.execSQL(CREATE_TABLE_SAVED_JOBS);
+            db.execSQL(CREATE_TABLE_CVS);
             Log.d("DatabaseHelper", "Tables créées avec succès");
 
             // Ajouter des utilisateurs de test
@@ -164,7 +187,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_JOB_LOCATION, "Casablanca");
         values.put(COLUMN_JOB_SALARY, "15 000 - 20 000 MAD");
         values.put(COLUMN_JOB_DESCRIPTION,
-                "Nous recherchons un développeur Android expérimenté pour rejoindre notre équipe. Vous serez responsable du développement et de la maintenance d'applications mobiles.");
+                "Nous recherchons un développeur Android expérimenté pour rejoindre notre équipe. Vous serez responsable du développement et de la maintenance d'applications mobiles Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise de Java/Kotlin maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise v maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise maîtrise de Java/Kotlin Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise ");
         values.put(COLUMN_JOB_REQUIREMENTS,
                 "Bac+5 en informatique, 3 ans d'expérience minimum, maîtrise de Java/Kotlin");
         values.put(COLUMN_JOB_TYPE, "CDI");
@@ -232,29 +255,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 3) {
             try {
                 db.execSQL("ALTER TABLE " + TABLE_USERS + " ADD COLUMN " + COLUMN_IMAGE_URI + " TEXT");
-            } catch (Exception e) {
-                Log.e("DatabaseHelper", "Erreur mise à jour V3: " + e.getMessage());
+            } catch (Exception e1) {
+                Log.e("DatabaseHelper", "Erreur mise à jour V3: " + e1.getMessage());
             }
         }
         if (oldVersion < 4) {
             try {
-                // Create saved_jobs table
                 db.execSQL(CREATE_TABLE_SAVED_JOBS);
-                // Add interview_scheduled column to candidatures
                 db.execSQL("ALTER TABLE " + TABLE_APPLICATIONS + " ADD COLUMN " + COLUMN_APPLICATION_INTERVIEW
                         + " INTEGER DEFAULT 0");
                 Log.d("DatabaseHelper", "Mise à jour V4: saved_jobs table et interview_scheduled ajoutés");
-            } catch (Exception e) {
-                Log.e("DatabaseHelper", "Erreur mise à jour V4: " + e.getMessage());
+            } catch (Exception e2) {
+                Log.e("DatabaseHelper", "Erreur mise à jour V4: " + e2.getMessage());
             }
         }
         if (oldVersion < 5) {
             try {
-                // Add logo_entreprise column to offres_emploi table
                 db.execSQL("ALTER TABLE " + TABLE_JOBS + " ADD COLUMN " + COLUMN_JOB_LOGO + " TEXT");
                 Log.d("DatabaseHelper", "Mise à jour V5: colonne logo_entreprise ajoutée");
-            } catch (Exception e) {
-                Log.e("DatabaseHelper", "Erreur mise à jour V5: " + e.getMessage());
+            } catch (Exception e3) {
+                Log.e("DatabaseHelper", "Erreur mise à jour V5: " + e3.getMessage());
+            }
+        }
+        if (oldVersion < 6) {
+            try {
+                db.execSQL(CREATE_TABLE_CVS);
+                Log.d("DatabaseHelper", "Mise à jour V6: table CVs créée");
+            } catch (Exception e4) {
+                Log.e("DatabaseHelper", "Erreur mise à jour V6: " + e4.getMessage());
             }
         }
     }
@@ -837,5 +865,74 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return savedJobs;
+    }
+    // ==================== CV Methods ====================
+
+    // Add CV
+    public boolean addCV(int userId, String titre, String domaine, String fileUri, String fileName, String uploadDate) {
+        SQLiteDatabase db = null;
+        try {
+            db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_CV_USER_ID, userId);
+            values.put(COLUMN_CV_TITRE, titre);
+            values.put(COLUMN_CV_DOMAINE, domaine);
+            values.put(COLUMN_CV_FILE_URI, fileUri);
+            values.put(COLUMN_CV_FILE_NAME, fileName);
+            values.put(COLUMN_CV_UPLOAD_DATE, uploadDate);
+
+            Log.d("DatabaseHelper", "Tentative d'insertion CV - userId: " + userId + ", titre: " + titre);
+
+            long result = db.insert(TABLE_CVS, null, values);
+
+            if (result == -1) {
+                Log.e("DatabaseHelper", "Échec de l'insertion du CV");
+                return false;
+            }
+
+            Log.d("DatabaseHelper", "CV inséré avec succès, ID: " + result);
+            return true;
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Erreur addCV: " + e.getMessage(), e);
+            return false;
+        }
+    }
+
+    // Get user's CVs
+    public List<CV> getUserCVs(int userId) {
+        List<CV> cvList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        try {
+            String query = "SELECT * FROM " + TABLE_CVS + " WHERE " + COLUMN_CV_USER_ID + " = ? ORDER BY "
+                    + COLUMN_CV_UPLOAD_DATE + " DESC";
+            cursor = db.rawQuery(query, new String[] { String.valueOf(userId) });
+
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CV_ID));
+                String titre = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CV_TITRE));
+                String domaine = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CV_DOMAINE));
+                String fileUri = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CV_FILE_URI));
+                String fileName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CV_FILE_NAME));
+                String uploadDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CV_UPLOAD_DATE));
+
+                cvList.add(new CV(id, userId, titre, domaine, fileUri, fileName, uploadDate));
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Erreur getUserCVs: " + e.getMessage());
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+
+        return cvList;
+    }
+
+    // Delete CV
+    public boolean deleteCV(int cvId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result = db.delete(TABLE_CVS, COLUMN_CV_ID + " = ?", new String[] { String.valueOf(cvId) });
+        return result > 0;
     }
 }

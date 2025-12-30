@@ -100,11 +100,13 @@ public class JobOfferAdapter extends RecyclerView.Adapter<JobOfferAdapter.JobVie
                         if (isSaved) {
                             // Unsave the job
                             dbHelper.unsaveJob(currentUserId, job.getId());
-                            btnSaveJob.setImageResource(R.drawable.ic_bookmark_outline);
+                            btnSaveJob.setImageResource(R.drawable.ic_bookmark_border);
+                            btnSaveJob.setColorFilter(0xFF9E9E9E); // Gray
                         } else {
                             // Save the job
                             dbHelper.saveJob(currentUserId, job.getId());
                             btnSaveJob.setImageResource(R.drawable.ic_bookmark_filled);
+                            btnSaveJob.setColorFilter(0xFFFFC107); // Yellow
                         }
 
                         // Notify listener for statistics update
@@ -149,8 +151,10 @@ public class JobOfferAdapter extends RecyclerView.Adapter<JobOfferAdapter.JobVie
                 boolean isSaved = dbHelper.isJobSaved(currentUserId, job.getId());
                 if (isSaved) {
                     btnSaveJob.setImageResource(R.drawable.ic_bookmark_filled);
+                    btnSaveJob.setColorFilter(0xFFFFC107); // Yellow
                 } else {
-                    btnSaveJob.setImageResource(R.drawable.ic_bookmark_outline);
+                    btnSaveJob.setImageResource(R.drawable.ic_bookmark_border);
+                    btnSaveJob.setColorFilter(0xFF9E9E9E); // Gray
                 }
             }
         }

@@ -52,29 +52,60 @@ public class JobDetailsActivity extends AppCompatActivity {
         setupButtons();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh save button state when returning to this screen
+        android.widget.ImageButton btnSaveJob = findViewById(R.id.btnSaveJob);
+        if (btnSaveJob != null && currentUser != null) {
+            boolean isSaved = dbHelper.isJobSaved(currentUser.getId(), jobId);
+            updateSaveButtonState(btnSaveJob, isSaved);
+        }
+    }
+
     private void loadJobData() {
         TextView tvJobTitle = findViewById(R.id.tvJobTitle);
         TextView tvCompanyName = findViewById(R.id.tvCompanyName);
         TextView tvLocation = findViewById(R.id.tvLocation);
         TextView tvSalary = findViewById(R.id.tvSalary);
+        TextView tvDescription = findViewById(R.id.tvDescription);
+        TextView tvRequirements = findViewById(R.id.tvRequirements);
+        TextView tvContractType = findViewById(R.id.tvContractType);
+        TextView tvExperience = findViewById(R.id.tvExperience);
+        // ImageView ivCompanyLogo = findViewById(R.id.ivCompanyLogo); // To be
+        // implemented with Glide/Picasso if URL exists
 
-        if (tvJobTitle != null) {
+        if (tvJobTitle != null)
             tvJobTitle.setText(currentJob.getTitle());
-        }
-
-        if (tvCompanyName != null) {
+        if (tvCompanyName != null)
             tvCompanyName.setText(currentJob.getCompany());
-        }
-
-        if (tvLocation != null && currentJob.getLocation() != null) {
+        if (tvLocation != null)
             tvLocation.setText(currentJob.getLocation());
+
+        if (tvSalary != null) {
+            String salary = currentJob.getSalary();
+            tvSalary.setText((salary != null && !salary.isEmpty()) ? salary : "Salaire non spécifié");
         }
 
-        if (tvSalary != null && currentJob.getSalary() != null) {
-            tvSalary.setText(currentJob.getSalary());
+        if (tvDescription != null) {
+            String desc = currentJob.getDescription();
+            tvDescription.setText((desc != null && !desc.isEmpty()) ? desc : "Aucune description disponible.");
         }
 
-        // TODO: Charger la description et les exigences si des TextView existent dans le layout
+        if (tvRequirements != null) {
+            String reqs = currentJob.getRequirements();
+            tvRequirements.setText((reqs != null && !reqs.isEmpty()) ? reqs : "Aucune exigence spécifiée.");
+        }
+
+        if (tvContractType != null) {
+            String type = currentJob.getType();
+            tvContractType.setText((type != null && !type.isEmpty()) ? type : "CDI");
+        }
+
+        // Placeholder for Experience as it's not in DB yet
+        if (tvExperience != null) {
+            tvExperience.setText("+3 ans");
+        }
     }
 
     private void setupToolbar() {
@@ -99,22 +130,56 @@ public class JobDetailsActivity extends AppCompatActivity {
     }
 
     private void setupButtons() {
-        Button btnApplyNow = findViewById(R.id.btnApplyNow);
-        Button btnSaveJob = findViewById(R.id.btnSaveJob);
+        android.widget.ImageButton btnSaveJob = findViewById(R.id.btnSaveJob);
+        com.google.android.material.button.MaterialButton btnApplyNow = findViewById(R.id.btnApplyNow);
+
+        // Check if job is already saved
+        boolean isSaved = dbHelper.isJobSaved(currentUser.getId(), jobId);
+        updateSaveButtonState(btnSaveJob, isSaved);
+
+        if (btnSaveJob != null) {
+            btnSaveJob.setOnClickListener(v -> {
+                boolean currentlySaved = dbHelper.isJobSaved(currentUser.getId(), jobId);
+                if (currentlySaved) {
+                    // Unsave the job
+                    dbHelper.unsaveJob(currentUser.getId(), jobId);
+                    updateSaveButtonState(btnSaveJob, false);
+                    Toast.makeText(this, "Offre retirée des favoris", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Save the job
+                    dbHelper.saveJob(currentUser.getId(), jobId);
+                    updateSaveButtonState(btnSaveJob, true);
+                    Toast.makeText(this, "Offre ajoutée aux favoris", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         if (btnApplyNow != null) {
             if (hasApplied) {
                 btnApplyNow.setText("Déjà postulé");
-                btnApplyNow.setEnabled(false);
+                btnApplyNow.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFF4CAF50)); // Green
+                btnApplyNow.setEnabled(true); // Keep enabled to show state
+                btnApplyNow.setOnClickListener(null); // Remove click action
             } else {
+                btnApplyNow.setText("Postuler");
+                btnApplyNow.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                        getResources().getColor(R.color.primary_color)));
                 btnApplyNow.setOnClickListener(v -> applyForJob());
             }
         }
+    }
 
-        if (btnSaveJob != null) {
-            btnSaveJob.setOnClickListener(v -> {
-                Toast.makeText(this, "Fonctionnalité de sauvegarde à venir", Toast.LENGTH_SHORT).show();
-            });
+    private void updateSaveButtonState(android.widget.ImageButton button, boolean isSaved) {
+        if (button != null) {
+            if (isSaved) {
+                // Yellow icon for saved
+                button.setImageResource(R.drawable.ic_bookmark_filled);
+                button.setColorFilter(0xFFFFC107);
+            } else {
+                // Gray icon for unsaved
+                button.setImageResource(R.drawable.ic_bookmark_border);
+                button.setColorFilter(0xFF9E9E9E);
+            }
         }
     }
 
@@ -126,10 +191,12 @@ public class JobDetailsActivity extends AppCompatActivity {
             hasApplied = true;
 
             // Mettre à jour le bouton
-            Button btnApplyNow = findViewById(R.id.btnApplyNow);
+            com.google.android.material.button.MaterialButton btnApplyNow = findViewById(R.id.btnApplyNow);
             if (btnApplyNow != null) {
                 btnApplyNow.setText("Déjà postulé");
-                btnApplyNow.setEnabled(false);
+                btnApplyNow.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFF4CAF50)); // Green
+                btnApplyNow.setEnabled(true);
+                btnApplyNow.setOnClickListener(null);
             }
 
             // Optionnel: Rediriger vers MyApplicationsActivity après un court délai
