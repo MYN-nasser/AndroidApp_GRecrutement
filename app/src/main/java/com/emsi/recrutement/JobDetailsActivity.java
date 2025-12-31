@@ -184,32 +184,11 @@ public class JobDetailsActivity extends AppCompatActivity {
     }
 
     private void applyForJob() {
-        long result = dbHelper.addApplication(currentUser.getId(), jobId);
-
-        if (result != -1) {
-            Toast.makeText(this, "Candidature envoyée avec succès!", Toast.LENGTH_SHORT).show();
-            hasApplied = true;
-
-            // Mettre à jour le bouton
-            com.google.android.material.button.MaterialButton btnApplyNow = findViewById(R.id.btnApplyNow);
-            if (btnApplyNow != null) {
-                btnApplyNow.setText("Déjà postulé");
-                btnApplyNow.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFF4CAF50)); // Green
-                btnApplyNow.setEnabled(true);
-                btnApplyNow.setOnClickListener(null);
-            }
-
-            // Optionnel: Rediriger vers MyApplicationsActivity après un court délai
-            new android.os.Handler().postDelayed(() -> {
-                Intent intent = new Intent(JobDetailsActivity.this, MyApplicationsActivity.class);
-                intent.putExtra("USER_EMAIL", userEmail);
-                intent.putExtra("APPLICATION_SENT", true);
-                startActivity(intent);
-                finish();
-            }, 1500);
-        } else {
-            Toast.makeText(this, "Erreur lors de l'envoi de la candidature", Toast.LENGTH_SHORT).show();
-        }
+        // Navigate to ApplyJobActivity
+        Intent intent = new Intent(this, ApplyJobActivity.class);
+        intent.putExtra("JOB_ID", jobId);
+        intent.putExtra("USER_EMAIL", userEmail);
+        startActivity(intent);
     }
 
     @Override

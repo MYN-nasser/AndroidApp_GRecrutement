@@ -46,6 +46,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_APPLICATION_STATUS = "statut"; // En attente, Acceptée, Refusée
     public static final String COLUMN_APPLICATION_DATE = "date_candidature";
     public static final String COLUMN_APPLICATION_INTERVIEW = "interview_scheduled"; // 0 or 1
+    public static final String COLUMN_APPLICATION_CV_ID = "cv_id";
+    public static final String COLUMN_APPLICATION_COVER_LETTER = "cover_letter";
 
     // Table saved jobs (offres enregistrées)
     public static final String TABLE_SAVED_JOBS = "saved_jobs";
@@ -96,8 +98,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_APPLICATION_JOB_ID + " INTEGER NOT NULL," +
             COLUMN_APPLICATION_STATUS + " TEXT DEFAULT 'En attente'," +
             COLUMN_APPLICATION_DATE + " TEXT DEFAULT (datetime('now'))," +
+            COLUMN_APPLICATION_CV_ID + " INTEGER," +
+            COLUMN_APPLICATION_COVER_LETTER + " TEXT," +
             "FOREIGN KEY(" + COLUMN_APPLICATION_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_ID + ")," +
-            "FOREIGN KEY(" + COLUMN_APPLICATION_JOB_ID + ") REFERENCES " + TABLE_JOBS + "(" + COLUMN_JOB_ID + ")" +
+            "FOREIGN KEY(" + COLUMN_APPLICATION_JOB_ID + ") REFERENCES " + TABLE_JOBS + "(" + COLUMN_JOB_ID + ")," +
+            "FOREIGN KEY(" + COLUMN_APPLICATION_CV_ID + ") REFERENCES " + TABLE_CVS + "(" + COLUMN_CV_ID + ")" +
             ");";
 
     // Requête de création de table saved jobs
@@ -429,6 +434,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return user;
     }
 
+    // Get user by ID
+    public User getUserById(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        User user = null;
+
+        try {
+            String query = "SELECT * FROM " + TABLE_USERS + " WHERE " + COLUMN_ID + " = ?";
+            Cursor cursor = db.rawQuery(query, new String[] { String.valueOf(userId) });
+
+            if (cursor.moveToFirst()) {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
+                String email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL));
+                String nom = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOM));
+                String prenom = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PRENOM));
+                String telephone = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TELEPHONE));
+                String type = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TYPE));
+                String imageUri = null;
+                int imageIndex = cursor.getColumnIndex(COLUMN_IMAGE_URI);
+                if (imageIndex != -1) {
+                    imageUri = cursor.getString(imageIndex);
+                }
+
+                user = new User(id, email, nom, prenom, telephone, type, imageUri);
+            }
+
+            cursor.close();
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Erreur getUserById: " + e.getMessage());
+        }
+
+        db.close();
+        return user;
+    }
+
     // Méthode pour mettre à jour les informations utilisateur (Profil complet)
     public boolean updateUserProfile(String email, String nom, String prenom, String telephone, String imageUri) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -610,6 +649,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    // Add application with CV and cover letter
+    public long addApplicationWithDetails(int userId, int jobId, int cvId, String coverLetter) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        try {
+            // Check if application already exists
+            String checkQuery = "SELECT * FROM " + TABLE_APPLICATIONS +
+                    " WHERE " + COLUMN_APPLICATION_USER_ID + " = ? AND " +
+                    COLUMN_APPLICATION_JOB_ID + " = ?";
+            Cursor cursor = db.rawQuery(checkQuery, new String[] { String.valueOf(userId), String.valueOf(jobId) });
+
+            if (cursor.getCount() > 0) {
+                cursor.close();
+                db.close();
+                return -1; // Application already exists
+            }
+            cursor.close();
+
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_APPLICATION_USER_ID, userId);
+            values.put(COLUMN_APPLICATION_JOB_ID, jobId);
+            values.put(COLUMN_APPLICATION_STATUS, "En attente");
+            values.put(COLUMN_APPLICATION_CV_ID, cvId);
+            if (coverLetter != null && !coverLetter.trim().isEmpty()) {
+                values.put(COLUMN_APPLICATION_COVER_LETTER, coverLetter);
+            }
+
+            long result = db.insert(TABLE_APPLICATIONS, null, values);
+            Log.d("DatabaseHelper", "Candidature avec CV ajoutée avec ID: " + result);
+
+            db.close();
+            return result;
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Erreur addApplicationWithDetails: " + e.getMessage());
+            db.close();
+            return -1;
+        }
+    }
+
     // Méthode pour obtenir les candidatures d'un utilisateur
     public java.util.List<ApplicationInfo> getUserApplications(int userId) {
         java.util.List<ApplicationInfo> applications = new java.util.ArrayList<>();
@@ -641,6 +719,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.close();
         return applications;
+    }
+
+    // Get application by ID
+    public ApplicationInfo getApplicationById(int applicationId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ApplicationInfo application = null;
+
+        try {
+            String query = "SELECT a.*, j." + COLUMN_JOB_TITLE + ", j." + COLUMN_JOB_COMPANY +
+                    " FROM " + TABLE_APPLICATIONS + " a" +
+                    " INNER JOIN " + TABLE_JOBS + " j ON a." + COLUMN_APPLICATION_JOB_ID + " = j." + COLUMN_JOB_ID +
+                    " WHERE a." + COLUMN_APPLICATION_ID + " = ?";
+            Cursor cursor = db.rawQuery(query, new String[] { String.valueOf(applicationId) });
+
+            if (cursor.moveToFirst()) {
+                int appId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_APPLICATION_ID));
+                int userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_APPLICATION_USER_ID));
+                int jobId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_APPLICATION_JOB_ID));
+                String status = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_APPLICATION_STATUS));
+                String date = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_APPLICATION_DATE));
+                String jobTitle = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_JOB_TITLE));
+                String company = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_JOB_COMPANY));
+
+                application = new ApplicationInfo(appId, userId, jobId, jobTitle, company, status, date);
+            }
+
+            cursor.close();
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Erreur getApplicationById: " + e.getMessage());
+        }
+
+        db.close();
+        return application;
     }
 
     // Méthode pour vérifier si un utilisateur a déjà postulé
@@ -927,6 +1038,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return cvList;
+    }
+
+    // Get CV by ID
+    public CV getCVById(int cvId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        CV cv = null;
+        Cursor cursor = null;
+
+        try {
+            String query = "SELECT * FROM " + TABLE_CVS + " WHERE " + COLUMN_CV_ID + " = ?";
+            cursor = db.rawQuery(query, new String[] { String.valueOf(cvId) });
+
+            if (cursor.moveToFirst()) {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CV_ID));
+                int userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CV_USER_ID));
+                String titre = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CV_TITRE));
+                String domaine = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CV_DOMAINE));
+                String fileUri = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CV_FILE_URI));
+                String fileName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CV_FILE_NAME));
+                String uploadDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CV_UPLOAD_DATE));
+
+                cv = new CV(id, userId, titre, domaine, fileUri, fileName, uploadDate);
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Erreur getCVById: " + e.getMessage());
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+
+        return cv;
     }
 
     // Delete CV
